@@ -1,0 +1,214 @@
+openapi: 3.0.0
+info:
+  title: Bakery Management System API
+  version: 1.0.0
+  description: |
+    API for bakery website and staff applications
+    - **Website**: Public product display
+    - **Staff App**: Order processing, inventory management
+    - **Admin**: Analytics, employee management
+
+servers:
+  - url: https://api.yourbakery.com/v1
+    description: Production server
+  - url: http://localhost:1000/v1
+    description: Local development
+
+tags:
+  - name: Authentication
+    description: Employee login and token management
+  - name: Products
+    description: Menu items and inventory
+  - name: Orders
+    description: Customer order processing
+  - name: Employees
+    description: Staff management
+  - name: Analytics
+    description: Business intelligence (Owner only)
+
+paths:
+  # --- AUTHENTICATION ---
+  /auth/employee/login:
+    post:
+      tags: [Authentication]
+      summary: Employee login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: "employee@bakery.com"
+                password:
+                  type: string
+                  format: password
+                  example: "securePassword123"
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                  user:
+                    $ref: "#/components/schemas/Employee"
+
+  # --- WEBSITE ENDPOINTS ---
+  /website/menu:
+    get:
+      tags: [Products]
+      summary: Get menu for public website
+      responses:
+        200:
+          description: Menu with categorized products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MenuCategory"
+
+  # --- STAFF APP ENDPOINTS ---
+  /staff/quick-order:
+    post:
+      tags: [Orders]
+      summary: Create quick order (Staff App)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuickOrder"
+      responses:
+        201:
+          description: Order created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  # --- INVENTORY ALERTS (WebSocket) ---
+  /ws:
+    get:
+      tags: [Products]
+      summary: WebSocket connection for real-time alerts
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        101:
+          description: Switching Protocols (WebSocket)
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 123
+        name:
+          type: string
+          example: "John Doe"
+        roles:
+          type: array
+          items:
+            type: string
+            enum: [owner, manager, employee]
+          example: ["employee"]
+
+    MenuCategory:
+      type: object
+      properties:
+        category:
+          type: string
+          example: "Bread"
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 101
+        name:
+          type: string
+          example: "Sourdough Loaf"
+        price:
+          type: number
+          format: float
+          example: 5.99
+        allergens:
+          type: array
+          items:
+            type: string
+          example: ["Gluten"]
+
+    QuickOrder:
+      type: object
+      required: [items]
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: integer
+                example: 101
+              quantity:
+                type: integer
+                example: 2
+          minItems: 1
+        notes:
+          type: string
+          example: "No nuts please"
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1001
+        total:
+          type: number
+          example: 11.98
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItem"
+
+    OrderItem:
+      type: object
+      properties:
+        productId:
+          type: integer
+          example: 101
+        quantity:
+          type: integer
+          example: 2
+        price:
+          type: number
+          example: 5.99
