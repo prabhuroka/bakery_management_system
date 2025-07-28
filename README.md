@@ -102,31 +102,7 @@ Swagger UI: http://localhost:8080
 
 OpenAPI Spec: http://localhost:1000/api-docs.yml
 
-Project Structure
-text
-bakery-management-api/
-├── app.js                # Main application entry point
-├── config/
-│   ├── database.js       # Database connection configuration
-├── middleware/
-│   ├── auth.js           # Authentication middleware
-│   ├── security.js       # Security middleware
-│   └── audit.js          # Audit logging middleware
-├── routes/
-│   ├── auth.js           # Authentication routes
-│   ├── products.js       # Product management routes
-│   ├── orders.js         # Order processing routes
-│   ├── employees.js      # Employee management routes
-│   ├── inventory.js      # Inventory management routes
-│   └── ...               # Other route files
-├── websocket.js          # WebSocket server implementation
-├── tasks.js              # Scheduled tasks
-├── backup.js             # Database backup utilities
-├── database.sql          # Database schema and seed data
-├── api-docs.yml          # OpenAPI specification
-├── docker-compose.yml    # Docker configuration
-├── package.json
-└── README.md
+
 Available Endpoints
 The API is organized into several modules:
 
@@ -257,33 +233,7 @@ bash
 npm start
 The website will be available at http://localhost:3000
 
-Project Structure
-text
-bakery-website/
-├── public/                  # Static files
-├── src/
-│   ├── components/          # Reusable components
-│   │   ├── ErrorMessage.tsx
-│   │   ├── Footer.tsx
-│   │   ├── Header.tsx
-│   │   ├── LoadingSpinner.tsx
-│   │   ├── MenuCategory.tsx
-│   │   └── ProductCard.tsx
-│   ├── pages/               # Page components
-│   │   ├── Home.tsx
-│   │   ├── Menu.tsx
-│   │   ├── About.tsx
-│   │   └── Contact.tsx
-│   ├── services/            # API services
-│   │   ├── api.ts
-│   │   └── types.ts
-│   ├── styles/              # Global styles
-│   │   ├── main.css
-│   │   └── variables.css
-│   ├── App.tsx              # Main app component
-│   └── index.tsx            # Entry point
-├── package.json
-└── README.md
+
 Available Scripts
 In the project directory, you can run:
 
@@ -420,21 +370,7 @@ npm run build: Builds the app for production
 
 npm run eject: Ejects from Create React App (advanced)
 
-Project Structure
-text
-bakery-pos/
-├── public/                  # Static files
-├── src/
-│   ├── components/          # Reusable components
-│   ├── pages/               # Main application pages
-│   ├── services/            # API and authentication services
-│   ├── styles/              # CSS stylesheets
-│   ├── types.ts             # TypeScript type definitions
-│   ├── App.tsx              # Main application component
-│   └── index.tsx            # Application entry point
-├── .env                     # Environment variables
-├── package.json             # Project dependencies and scripts
-└── README.md                # This file
+
 Development Notes
 Authentication
 The system uses JWT for authentication. Default login credentials:
